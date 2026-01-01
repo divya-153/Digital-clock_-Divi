@@ -100,7 +100,7 @@ const city="Tenkasi";
 
 
 function fetchWeather(){
-  fetch(`http://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`)
+  fetch(`https://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`)
   .then(res=>res.json())
   .then(data=>{
     if(data.error){
