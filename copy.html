@@ -1,97 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Clock</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Clock with Greetings</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  
+@font-face { 
+  font-family: 'DS-Digital'; 
+  src: url(DS-DIGI.TTF) format('truetype'); 
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-size: 48px; 
+  transition: background-image 1.5s ease-in-out, background-color 1.5s ease-in-out;
+  color: white; 
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+  font-family: Arial, Helvetica, sans-serif; /* body uses normal font */
+}
+
+.climate{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0,0,0,0.4);
+  padding:2px 4px;
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+}
+
+
+
+
+.clock {
+  padding: 20px 30px;
+  border-radius: 12px;
+  background-color: rgba(255,255,255,0.9);
+  color: black;
+  font-family: 'DS-Digital', monospace; /* only clock uses DS-Digital */
+  font-size: 80px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 20px rgba(0,255,255,0.7);
+  transition: all 0.3s ease;
+}
+
+#greet, #calendar {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 36px;
+  letter-spacing: 2px;
+font-family: 'Pacifico', cursive;
+ text-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 20px rgba(0,255,255,0.7);}
+
+
+.clock-row {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.clock:hover {
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 30px rgba(0,255,255,1);
+  transform: scale(1.05); 
+}
+
+.separator {
+  font-size: 80px;
+  color: cyan;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+}
+
+
+#greet {
+  animation: greetFade 4s linear infinite ;
+}
+#ampm { 
+  font-size: 36px; padding: 10px 15px; letter-spacing: 2px; 
+}
+@keyframes greetFade {
+  0% { opacity: 0.6; transform: translateY(-5px);}
+  100% { opacity: 1; transform: translateY(5px);}
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 32px;
+    background-size: contain;   
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;    
+  }
+ .climate {
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    padding: 6px 12px;
+  }
+  .clock {
+    font-size: 50px;
+    padding: 15px 20px;
+  }
+
+  .separator {
+    font-size: 50px;
+  }
+
+  #greet, #calendar {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  #ampm {
+    font-size: 24px;
+    padding: 5px 10px;
+  }
+
+  .clock-row {
+    gap: 10px;
+    flex-wrap: wrap; /* allow wrapping on very small screens */
+  }
+}
+
+/* Media query for very small screens (mobile phones) */
+@media (max-width: 480px) {
+  body {
+    font-size: 24px;
+    background-size: contain;   /* keep full image */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+  }
+
+  .clock {
+    font-size: 40px;
+    padding: 10px 15px;
+  }
+
+  .separator {
+    font-size: 40px;
+  }
+
+  #greet, #calendar {
+    font-size: 18px;
+  }
+
+  #ampm {
+    font-size: 18px;
+    padding: 3px 6px;
+  }
+  body {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .climate {
+    top: 6px;
+    right: 6px;
+    font-size: 14px;
+    gap: 4px;
+    padding: 6px 8px;
+    border-radius: 8px;
+  }
+
+  /* Optional: hide condition text if needed */
+  #condition {
+    display: none;
+  }
+   
+}
+
+
+</style>
+
 </head>
-<body id="background">
-  <p id="greet"> </p>
-  <div class="clock"> 
-    <input type="text" id="display" readonly />
+<body id="background" style="background:black;">
+
+
+  <p id="greet"></p>
+ 
+ <div class="climate">
+    <p id="temp">🌡 31°C</p>
+    <p id="condition">• Clouds</p>
+    <p>in Tenkasi</p>
   </div>
-  <div id="calendar">
-
-  </div>
-  <script>
-     const days = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
-     const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-    let greeting=document.getElementById("greet");
-
-    let background=document.getElementById("background");
-    let calendar=document.getElementById("calendar");
-    
-    setInterval(function(){
-        let date=new Date();
-        let hours=date.getHours();
-        let min=date.getMinutes();
-        let sec=date.getSeconds();
-
-       
-
-        let ampm = hours >= 12 ? "PM" : "AM"; 
-         hours = hours % 12;
-         hours = hours ? hours : 12; 
-          
-        let zero_h=hours<10 ?"0":"";
-        let zero_m=min<10 ?"0":"";
-        let zero_s=sec<10 ?"0":"";
-
-        document.getElementById("display").value=`${zero_h}${hours}:${zero_m}${min}:${zero_s}${sec} ${ampm}`;
-        
-       
-
-        let day=days[date.getDay()];
-
-        let month=months[date.getMonth()];
-      
-
-        let dated=date.getDate();
-        let year=date.getFullYear();
-
-      
-
-        calendar.innerHTML=`${day} - ${month} ${dated}, ${year}`
-       
-      
-
-       
-
-        if(date.getHours()<11){
-          greeting.innerHTML="Good Morning";
-           
-          background.style.backgroundImage = "url('./image/mor.jpg')";
-          background.style.backgroundSize = "cover"; 
-          background.style.backgroundPosition = "center";
-
-        }
-        else if(date.getHours()<15){
-          greeting.innerHTML="Good Afternoon";
-
-          background.style.backgroundImage = "url('./image/afternoon.jpg')";
-          background.style.backgroundSize = "cover"; 
-          background.style.backgroundPosition = "center";
-        }
-        else if(date.getHours()<19){
-           greeting.innerHTML="Good Evening";
-
-          background.style.backgroundImage = "url('./image/eve.jpg')";
-          background.style.backgroundSize = "cover"; 
-          background.style.backgroundPosition = "center"
-        }
-        else{
-           greeting.innerHTML="Good Night";
-
-          background.style.backgroundImage = "url('./image/nit.jpg')";
-          background.style.backgroundSize = "cover"; 
-          background.style.backgroundPosition = "center"
-        }
 
 
+<div class="clock-row">
+  <div class="clock" id="hour">00</div>
+  <div class="separator">:</div>
+  <div class="clock" id="min">00</div>
+  <div class="separator">:</div>
+  <div class="clock" id="sec">00</div>
+  <div class="clock" id="ampm">AM</div>
+</div>
 
-        
-        
-    },1000)
-  </script>
+<div id="calendar"></div>
+
+<script>
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+const hour_box = document.getElementById("hour");
+const min_box = document.getElementById("min");
+const sec_box = document.getElementById("sec");
+const ampm_box = document.getElementById("ampm");
+const greeting = document.getElementById("greet");
+const background = document.getElementById("background");
+const calendar = document.getElementById("calendar");
+
+// Greeting messages
+const greetings = {
+  morning: [
+    "☀ Good Morning – Rise and Shine!",
+    "🌅 Morning! Time for a fresh start!",
+    "☕ Grab your coffee and smile!"
+  ],
+  afternoon: [
+    "🌤 Good Afternoon – Keep Going!",
+    "🍽 Lunch Time! Recharge Yourself!",
+    "💼 Stay productive this afternoon!"
+  ],
+  evening: [
+    "🌙 Good Evening – Relax a bit!",
+    "🌆 Enjoy the sunset and unwind!",
+    "💫 Evening vibes – Reflect on your day!"
+  ],
+  night: [
+    "🌌 Good Night – Sweet Dreams!",
+    "🛌 Time to Sleep – Recharge!",
+    "⭐ The stars are shining for you!"
+  ]
+};
+
+function updateClock() {
+  const date = new Date();
+  let hours = date.getHours();
+  let min = date.getMinutes();
+  let sec = date.getSeconds();
+  
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  
+  const zero_h = hours < 10 ? "0" : "";
+  const zero_m = min < 10 ? "0" : "";
+  const zero_s = sec < 10 ? "0" : "";
+
+  hour_box.innerHTML = `${zero_h}${hours}`;
+  min_box.innerHTML = `${zero_m}${min}`;
+  sec_box.innerHTML = `${zero_s}${sec}`;
+  ampm_box.innerHTML = ampm;
+
+  // Calendar
+  const day = days[date.getDay()];
+  const month = months[date.getMonth()];
+  const dated = date.getDate();
+  const year = date.getFullYear();
+  calendar.innerHTML = `${day} - ${month} ${dated}, ${year}`;
+
+  // Greetings
+  let timeMessage = "Digital Clock";
+  if(date.getHours() >= 5 && date.getHours() <= 11){
+    timeMessage = greetings.morning[Math.floor(Math.random() * greetings.morning.length)];
+    background.style.backgroundImage = "url('./image/mor.jpg')";
+    background.style.backgroundSize = "cover";
+    background.style.backgroundPosition = "center";
+  } 
+  else if(date.getHours() >= 12 && date.getHours() <= 16){
+    timeMessage = greetings.afternoon[Math.floor(Math.random() * greetings.afternoon.length)];
+    background.style.backgroundImage = "url('./image/afternoon.jpg')";
+    background.style.backgroundSize = "cover";
+    background.style.backgroundPosition = "center";
+  }
+   else if(date.getHours() >= 17 && date.getHours() <= 19){
+    timeMessage = greetings.evening[Math.floor(Math.random() * greetings.evening.length)];
+    background.style.backgroundImage = "url('./image/eve.jpg')";
+    background.style.backgroundSize = "cover";
+    background.style.backgroundPosition = "center";
+  } 
+  else {
+    timeMessage = greetings.night[Math.floor(Math.random() * greetings.night.length)];
+    background.style.backgroundImage = "url('./image/night.jpg')";
+    background.style.backgroundSize = "cover";
+    background.style.backgroundPosition = "center";
+  }
+
+  greeting.innerHTML = timeMessage;
+}
+
+// Run every second
+setInterval(updateClock, 1000);
+updateClock(); // initial call
+
+
+const apiKey="a3cd89049ffaf0d2155f25c0bb7c2968";
+const city="Tenkasi";
+
+
+function fetchWeather(){
+  fetch(`http://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`)
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.error){
+      console.log("Weather Error:",data.error.info);
+      return;
+    }
+    const temp=data.current.temperature;
+    const condition=data.current.weather_descriptions[0];
+    const icons = {
+      "Clear": "☀️",
+      "Sunny": "☀️",
+      "Partly cloudy": "⛅",
+      "Clouds": "☁️",
+      "Overcast": "☁️",
+      "Rain": "🌧️",
+      "Drizzle": "🌦️",
+      "Snow": "❄️",
+      "Haze": "🌫️",
+      "Fog": "🌫️",
+      "Thunderstorm": "⛈️",
+      "Mist": "🌫️"
+    };
+    const icon=icons[condition] || "🌡️";
+
+
+    document.getElementById("temp").innerHTML=`${icon} ${temp}°C`;
+    document.getElementById("condition").innerHTML=`- ${condition}`;
+  })
+  .catch(err=>{
+    console.log("Fetch error:",err);
+  });
+}
+fetchWeather();
+</script>
+
 </body>
 </html>
